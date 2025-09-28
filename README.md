@@ -185,7 +185,9 @@ Each module corresponds to a script inside the `utils/` floder
    - The YAML file contains a **`model`** field (see image below).
    - The logic supports **multi-model labeling**, i.e. you can configure multiple models for labeling and then aggregate their predictions according to the computation rules defined in the script.
    - In this demo, only **one sentiment model** is used. You can add more models following the same configuration format.
-  
+    
+   -![Model Dict](misc/picture/model_dict.png)
+
 3. **Statistics (`SentimentStats.py`)**
    - After labeling, the CSV file is summarized.
    - This step relies on **user IDs**
@@ -214,3 +216,27 @@ Each module corresponds to a script inside the `utils/` floder
    - If your LLM supports larger context windows, you may safely modify this function.
   
 6. **Pipeline
+   - Contains some parameters, but less critical.
+   - Example fields:
+     - `batch_size`: Controls the batch size used by the sentiment labeling model. (Technically this belongs in `labeler`, but it was placed here initially and left unchanged).
+     - `save_csv`, `output_dir`: Control saving of intermediate and final outputs. In the current setup, these are not used, but you can configure them to save the final LLM responses.
+    
+## Execution Time Logging
+
+The `utils/logger_utils.py` module provides a utility to record the execution time of each step in the pipeline.
+
+- When used, it generates a log file at:
+`Sentiment_Analysis_Automation/logs/pipeline.log`
+  
+- This log tracks the time spent in key stages of the pipeline, including:
+- Sentiment labeling
+- Sentiment statistics computation
+- Keyword cleaning
+- Clustering
+- AI summarization
+- **Important:** By default, the log is **overwritten** each time you run the pipeline.
+- Each execution creates a fresh `pipeline.log`, replacing the previous one.
+- **Optional:** If you want to **append** to the existing log instead of overwriting it, you can modify the logger parameters in `logger_utils.py` to enable append mode.
+
+This feature is useful to monitor performance and identify potential bottlenecks in the pipeline over time.
+  
