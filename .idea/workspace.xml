@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7cfd0a53-ed23-4b37-9ae0-c44d0bcc9d72" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/misc/picture/model_dict.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +94,7 @@
       <updated>1757902203162</updated>
       <workItem from="1757902204279" duration="8814000" />
       <workItem from="1758092412904" duration="33728000" />
-      <workItem from="1758763995749" duration="49180000" />
+      <workItem from="1758763995749" duration="49393000" />
     </task>
     <servers />
   </component>
