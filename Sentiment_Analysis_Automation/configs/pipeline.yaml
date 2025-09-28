@@ -15,6 +15,9 @@ labeler:
     - name: "sentiment_model"
       model_path: "Sentiment_Analysis_Automation/model/sentiment_model"
       tokenizer_path: "Sentiment_Analysis_Automation/model/sentiment_model"
+#    - name: "A"
+#      model_path: "B"
+#      tokenizer_path: "C"
 
   thresholds:
     sentiment:

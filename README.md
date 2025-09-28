@@ -127,3 +127,90 @@ This folder contains auxiliary text resources for data cleaning and preprocessin
 - **hit_stopword.txt**
   The HIT stopword list (Harbin Institute of Technology), used to remove common stopwords during text cleaning.
   
+## Quick Start
+
+To help you quickly test this project, we have already included:
+
+- A **vectorization model**: [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
+- A **sentiment classification model**: [chinese-roberta-wwm-ext](https://huggingface.co/hfl/chinese-roberta-wwm-ext)
+
+Both models are downloaded directly from Hugging Face without any fine-tuning or modification.
+
+For the dataset, we used an **open-source Douban movie comments dataset**: [https://moviedata.csuldw.com](https://moviedata.csuldw.com).
+The dataset was originally collected and published by [csuldw/AntSpider](https://github.com/csuldw/AntSpider).
+In this project, we selected around **200 comments of the movie "Spirited Away" (千与千寻)** as an example.
+
+*** Usage
+
+1. Configure the file `pipeline.yaml`
+   - Set `analysis.ai_name` and `analysis.ai_url` according to your LLM service.
+   - Example: We used [Zhipu GLM-4](https://open.bigmodel.cn/) for summarization.
+
+2. If you want to switch to a different LLM:
+   - Update the values in `pipeline.yaml`.
+   - Modify the function `request_to_model` in `utils/ai_summary.py` to match the new API.
+  
+3. Run the pipeline:
+   ```bash
+   python utils/pipeline.py
+   ```
+   or simply run it inside your IDE.
+   (This project does not provide command-line arguments; configuration is managed via YAML.)
+   
+## Logic Chain Explanation
+
+If you still have patience to read further 😊, here is a detailed explanation of the logic chain and related modules:
+
+### YAML Configuration
+
+The `pipeline.yaml` file defines four main modules:
+
+- **labeler**
+- **analysis**
+- **keyword_cluster**
+- **pipeline**
+
+Each module corresponds to a script inside the `utils/` floder
+
+---
+
+### Overall Pipeline
+
+1. **Raw CSV Input**
+   - Start with raw CSV data.
+   - If you want to migrate your own dataset, you may need to preprocess it first.
+   - You can use the provided script in the `script/` folder (e.g., dropping columns, regex-based filtering/matching), or write your own preprocessing scripts.
+  
+2. **Labeling (`Labeler.py`)**
+   - The YAML file contains a **`model`** field (see image below).
+   - The logic supports **multi-model labeling**, i.e. you can configure multiple models for labeling and then aggregate their predictions according to the computation rules defined in the script.
+   - In this demo, only **one sentiment model** is used. You can add more models following the same configuration format.
+  
+3. **Statistics (`SentimentStats.py`)**
+   - After labeling, the CSV file is summarized.
+   - This step relies on **user IDs**
+     - If the same user wrote multiple comments, we care about the **distribution of sentiments per unique user**, not only the total number of text entries.
+     - This provides a more accurate view of sentiment at the **user level**.
+   - There is also a **`keywords`** configuration:
+     - If certain keywords appear in the text, they can be directly mapped to a pre-difined sentiment label.
+     - You can customize this mapping as needed.
+  
+4. **Clustering (`keyword_cluster.py`)**
+   - Perform text cleaning, keyword extraction, and similarity-based clustering.
+   - Goal: Reduce massive text data into a **key-phrase -> user count dictionary** for easier LLM summarization.
+   - Key components:
+     - **Keyword extraction**: Uses TextRank algorithm.
+     - **Stopwords**: Uses HIT stopword list (Harbin Institute of Technology).
+     - **Tokenization**: Uses Jieba by default (for Chinese). For English or other languages, you should switch to a different tokenizer and possibly adjust the logic.
+   - **Clustering methods**:
+     - `cluster_by_similarity_flexible` provides two versions:
+     - **CPU version** -> Processes sentence embeddings row by row (lower memory footprint).
+     - **GPU version** -> Processes in chunks on GPU (faster, but requires careful chunk size control to avoid OOM).
+   - Recommendation: Choose based on your hardware and dataset size.
+  
+5. **Summarization (`ai_summary.py`)**
+   - The clustered dictionary is sent to the LLM for summarization.
+   - Function `truncate_query_string` ensures the query is trimmed to **8192 characters**, since most LLMs cannot handle oversized input.
+   - If your LLM supports larger context windows, you may safely modify this function.
+  
+6. **Pipeline
