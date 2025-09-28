@@ -1,0 +1,11 @@
+jieba==0.42.1
+numpy==2.3.3
+pandas==2.3.2
+PyYAML==6.0.2
+requests==2.27.1
+sentence_transformers==5.1.0
+snownlp==0.12.3
+textrank4zh==0.3
+torch==2.8.0
+tqdm==4.67.1
+transformers==4.56.1

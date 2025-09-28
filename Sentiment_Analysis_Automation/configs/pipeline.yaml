@@ -1,0 +1,56 @@
+# 自动情感分析脚本 pipeline yaml 文件
+
+dataset:
+  csv_path: "Demand_analysis_data/qianyuqianxun/Dataset/comment_filtered_clean.csv"
+
+# labeler 配置
+labeler:
+  device: "cuda"
+
+  data:
+    text_column: 'CONTENT'
+    id_column: 'COMMENT_ID'
+
+  model:
+    - name: "sentiment_model"
+      model_path: "Sentiment_Analysis_Automation/model/sentiment_model"
+      tokenizer_path: "Sentiment_Analysis_Automation/model/sentiment_model"
+
+  thresholds:
+    sentiment:
+      positive: 0.9
+      negative: 0.1
+    mean:
+      positive: 0.85
+      negative: 0.15
+
+  keywords:
+    positive: []
+    negative: []
+    neutral: []
+
+analysis:
+  ai_summary_template: |
+      #背景# 你是一名数据分析师，以下是{analyze_content}，观众观影后的评论，其中第一列是评论内容，第二列是人数，首先你需要识别并挑选出里面有价值的{type_value}情绪倾向内容，然后对有价值的{type_value}情绪倾向内容进行总结，适当给一些例子，生成一份总结报告
+      #以下是用户输入#
+      #输入#
+      {input}
+  analyze_content: "电影千与千寻"
+  type_value: ["中性"]
+  ai_name: ""  # TODO: 配置你自己的 LLM 接口信息
+  ai_url: ""
+  label_col: "result"
+  #  label_col: "label"
+
+keyword_cluster:
+  similarity_device: "cpu"  # "cuda" / "cpu"
+  jieba_user_dict: "Sentiment_Analysis_Automation/vocabulary/daily_expressions.txt"
+  stop_words_file: "Sentiment_Analysis_Automation/vocabulary/hit_stopword.txt"
+  #  sentence_transformer_model: "/opt/public/public_model/sentiment_model/paraphrase-multilingual-MiniLM-L12-v2"
+  sentence_transformer_model: "Sentiment_Analysis_Automation/model/sentence_transformer_model"
+  special_words: []
+
+pipeline:
+  batch_size: 64
+  save_csv: false
+  output_dir: None

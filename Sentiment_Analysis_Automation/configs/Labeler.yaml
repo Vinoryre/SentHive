@@ -1,0 +1,23 @@
+# 标数据 yaml 文件
+
+# 数据路径
+data_path: "yuanxing/Dataset/content.csv"
+
+# 设备配置
+device: "cuda"
+
+# 模型配置
+model:
+  model_path: "/opt/public/public_model/sentiment_model/sentiment_model"
+  tokenizer_path: "/opt/public/public_model/sentiment_model/sentiment_model"
+
+# 情感阈值
+thresholds:
+  positive: 0.9  # 情感分数大于此为正向
+  negative: 0.1  # 情感分数小于此为负向
+
+# 人工干预关键词
+keywords:
+    positive: [ "真帅", "好看", "好帅", "好用", "漂亮", "霸气", "不丑", "厉害", "流弊", "划算", "好东西", "还行", "太帅", "不错" ]
+    negative: [ "不好看", "不好用", "没有用", "不漂亮", "不霸气", "贼傻", "没意义", "没啥意义", "不厉害", "又不加战", "不划算", "没用", "没什么用", "毛用没有", "不加战力" ]
+    neutral: [ "好不好看", "好不好用", "漂不漂亮", "霸不霸气", "怎么用", "干什么用", "是啥", "是个啥", "加战不", "加战力不", "干啥的", "是什么", "啥玩意", "不加战力吗", "是不是", "走一波", "帮我打", "完了吗", "哪里来的", "干嘛", "不知道", "为啥", "信息", "更新", "收徒弟了", "怎么弄", "干什么", "哪里搞" ]
