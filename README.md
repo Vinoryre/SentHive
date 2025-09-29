@@ -156,7 +156,11 @@ In this project, we selected around **200 comments of the movie "Spirited Away" 
    ```
    or simply run it inside your IDE.
    (This project does not provide command-line arguments; configuration is managed via YAML.)
-   
+   > **Note**
+   >
+   > - All file paths in this project use **relative paths**.
+   >   As long as you maintain the directory structure as described above, the pipeline will work without any additional path modifications.
+
 ## Logic Chain Explanation
 
 If you still have patience to read further 😊, here is a detailed explanation of the logic chain and related modules:
@@ -240,3 +244,10 @@ The `utils/logger_utils.py` module provides a utility to record the execution ti
 
 This feature is useful to monitor performance and identify potential bottlenecks in the pipeline over time.
   
+--- 
+
+##Cluster Algorithm Analysis
+A detailed analysis of the cluster algorithm and its optimizations is available in the following blog.
+Click the link if you are interested:
+[SentHive Blog Analysis](https://vinoryre.blogspot.com/2025/09/blogsenthive_28.html)
+
